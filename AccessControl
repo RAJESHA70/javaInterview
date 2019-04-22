@@ -137,3 +137,11 @@ exprA | exprB <-- this means evaluate exprA then evaluate exprB then do the |.
 
 exprA || exprB <-- this means evaluate exprA and only if this is false then evaluate exprB and do the ||.
 
+-----------------------------------------------------------------------------
+The overriding method can throw any unchecked (runtime) exception, regardless of exception thrown by overridden method. 
+NullPointerException is RuntimeException so compiler will not complain.
+---------------------------------------------------------------------------------------
+An Error is a subclass of Throwable that indicates serious problems that a reasonable application should not try to catch.
+-----------------------------------------------------------------------------------------
+
+
