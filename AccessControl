@@ -143,5 +143,269 @@ NullPointerException is RuntimeException so compiler will not complain.
 ---------------------------------------------------------------------------------------
 An Error is a subclass of Throwable that indicates serious problems that a reasonable application should not try to catch.
 -----------------------------------------------------------------------------------------
+Equals() method for the integer wrappers will only return true if the two primitive types and the two values are equal.
+-------------------------------------------------------------------------------
 
+ interface  Guard{
+	void doYourJob();
+}
+
+abstract  class Test implements Guard {
+	
+}
+//tell me the output : will run or give some error.!
+------------------------------------------------------------
+class cannot be abstract and final "there would be no way to use such a class".
+interfaces and classes cannot be marked as static. 
+classes and interfaces cannot be marked as protected.
+----------------------------------------------------------------------------------
+
+   class Test extends Thread {
+	public static void main(String[] args) {
+		Test t = new Test();
+		t.run();
+		t.start();
+	}
+	
+
+	public void run(){
+		System.out.println("run");
+	}
+}
+   t.run() Legal, but does not start a new thread ,
+   it is like a method call of a class Test BUT t.start() creates a thread and call run() method.
+ ----------------------------------------------------------------------------------------------
+ Once a thread has been started, it can never be started again. 
+ 2nd time t.start() throws java.lang.IllegalThreadStateException.
+  ----------------------------------------------------------------------------------------------
+  	class A implements Runnable{
+		public void run(){
+			try{
+				for(int i=0;i<4;i++){
+					Thread.sleep(1000);
+					System.out.println(Thread.currentThread().getName());
+				}
+			}catch(InterruptedException e){
+				e.getMessage();
+				e.printStackTrace();
+			}
+			
+		}
+	}
+   class Test  {
+	public static void main(String[] args) throws InterruptedException {
+		A a=new A();
+		Thread t=new Thread(a,"A");
+		Thread t2=new Thread(a,"B");
+		Thread t3=new Thread(a,"c");
+		t.start();
+		t.join();
+		t2.start();
+		t2.join();
+		t3.start();
+	}
+	
+}
+
+join() - Blocks the current Thread (Thread.currentThread()) until the receiver finishes its execution and dies
+----------------------------------------------------------------------------------------------
+import java.util.*;  
+class I  
+{ 
+    public static void main (String[] args)  
+    { 
+        Object i = new ArrayList().iterator();  
+        System.out.print((i instanceof List) + ", ");  
+        System.out.print((i instanceof Iterator) + ", ");  
+        System.out.print(i instanceof ListIterator);  
+    }  
+} 
+
+Explanation:
+The iterator() method returns an iterator over the elements in the list in proper sequence,
+ it doesn’t return a List or a ListIterator object. A ListIterator can be obtained by invoking the listIterator method.
+---------------------------------------------------------------------------------------------- 
+
+Object i=new ArrayList().iterator();
+System.out.println(i.getClass());
+----------------------------------------------------------------------------------------------
+ITERATOR	LISTITERATOR
+Introduced in Java 1.2.	Introduced in Java 1.2.
+It is an Iterator for whole Collection API.	It is an Iterator for only List implemented classes.
+It is an Universal Iterator.	It is NOT an Universal Iterator.
+It supports only Forward Direction Iteration.	It supports both Forward and Backward Direction iterations.
+It’s a Uni-Directional Iterator.	It’s a Bi-Directional Iterator.
+It supports only READ and DELETE operations.	It supports all CRUD operations.
+We can get Iterator by using iterator() method.	We can ListIterator object using listIterator() method.
+----------------------------------------------------------------------------------------------
+class ThreadEx extends Thread 
+{ 
+    public void run() 
+    { 
+        System.out.print("Hello..."); 
+    } 
+    public static void main(String args[]) 
+    { 
+        ThreadEx T1 = new ThreadEx(); 
+        T1.start(); 
+        T1.stop(); 
+        T1.start(); 
+    } 
+} 
+------------------------------------------------------------------------------------------------
+public class MyStuff 
+{ 
+    String name; 
+  
+    MyStuff(String n) {  name = n;  } 
+  
+    public static void main(String[] args) 
+    { 
+        MyStuff m1 = new MyStuff("guitar"); 
+        MyStuff m2 = new MyStuff("tv"); 
+        System.out.println(m2.equals(m1)); 
+    } 
+  
+    @Override
+    public boolean equals(Object obj) 
+    { 
+        MyStuff m = (MyStuff) obj; 
+        if (m.name != null)  { return true;  } 
+        return false; 
+    } 
+}
+The output is true and MyStuff does NOT fulfill the Object.equals() contract.
+Explanation : As equals(Object obj) method in Object class, compares two objects on the basis of equivalence relation.
+But here we are just confirming that the object is null or not, So it doesn’t fulfill Object.equals() contract. 
+As m1 is not null, true will be printed.
+------------------------------------------------------------------------------------------------
+
+StringBuilder s1=new StringBuilder("java");
+		String s2="love";
+		System.out.println(s1.append(s2));
+		System.out.println(s1);
+		System.out.println(s1.substring(4));
+		System.out.println(s1);
+		int foundAt=s1.indexOf(s2);
+		System.out.println(foundAt);
+------------------------------------------------------------------------------------------------
+class Writer 
+{ 
+    public  static void write() 
+    { 
+        System.out.println("Writing..."); 
+    } 
+} 
+class Author extends Writer 
+{ 
+    public  static void write() 
+    { 
+        System.out.println("Writing book"); 
+    } 
+} 
+  
+public class Programmer extends Author 
+{ 
+    public  static void write() 
+    { 
+        System.out.println("Writing code"); 
+    } 
+  
+    public static void main(String[] args) 
+    { 
+        Author a = new Programmer(); 
+        a.write(); 
+    } 
+} 
+
+------------------------------------------------------------------------------------------------
+class One implements Runnable  
+{ 
+    public void run()  
+    { 
+        System.out.print(Thread.currentThread().getName()); 
+    } 
+} 
+class Two implements Runnable  
+{ 
+    public void run()  
+    { 
+        new One().run(); 
+        new Thread(new One(),"gfg2").run(); 
+        new Thread(new One(),"gfg3").start(); 
+    } 
+} 
+
+class Test {
+	public static void main(String[] args) throws InterruptedException {
+		
+		 new Thread(new Two(),"gfg1").start(); 
+	}
+
+}
+------------------------------------------------------------------------------------------------
+public class Gfg 
+{ 
+    public static void main(String[] args) 
+    { 
+        Integer a = 128, b = 128; 
+        System.out.println(a == b); 
+  
+        Integer c = 100, d = 100; 
+        System.out.println(c == d); 
+    } 
+}
+--------------------------------------------------------------------------------------------------------
+ Integer a = 128, b = 128; 
+	        System.out.println(a == b); 
+	  
+	        Integer c = 100, d = 100; 
+	        System.out.println(c == d);//true why ... -128 to 127
+-------------------------------------------------------------------------------------------------------- 
+public class Test 
+{ 
+    static Test t ; 
+      
+    static int count =0; 
+      
+    public static void main(String[] args) throws InterruptedException 
+    { 
+        Test t1 = new Test(); 
+              
+        // making t1 eligible for garbage collection 
+        t1 = null; // line 12 
+              
+        // calling garbage collector 
+        System.gc(); // line 15 
+              
+        // waiting for gc to complete 
+        Thread.sleep(1000);  
+      
+        // making t eligible for garbage collection, 
+        t = null; // line 21 
+              
+        // calling garbage collector 
+        System.gc(); // line 24 
+      
+        // waiting for gc to complete 
+        Thread.sleep(1000);  
+              
+        System.out.println("finalize method called "+count+" times"); 
+          
+    } 
+      
+    @Override
+    protected void finalize()  
+    {  
+        count++; 
+          
+        t = this; // line 38 
+              
+    } 
+      
+} 
+Here, we have to clear about one fact about Garbage Collector 
+i.e. it will call finalize() method on a particular object exactly one time.
+ Since on this object, finalize() method is already called, 
+so now Garbage Collector will destroy it without calling finalize() method again.
 
