@@ -408,4 +408,4 @@ Here, we have to clear about one fact about Garbage Collector
 i.e. it will call finalize() method on a particular object exactly one time.
  Since on this object, finalize() method is already called, 
 so now Garbage Collector will destroy it without calling finalize() method again.
-
+-------------------
