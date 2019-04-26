@@ -118,3 +118,36 @@ Explain WHATWG.
 WHATWG stands for Web HyperText Application Technology Working Group which is an organization 
 that develops and also maintains the HTML and API for web applications.
 -----------------------------------------------------------------------------
+What is an API in HTML5?
+API stands for Application Programming Interfaces and is a way to create applications.
+They use pre-built components. Using the available APIs, developers can integrate the features into their websites
+----------------------------------------------------------------------------------
+43. What are the two methods that are used in form elements action attribute?
+A form has an action attribute that takes two values, Post and Get (default).
+The Post method is used to submit (insert\update\delete) data whereas, Get method is used to get some data.
+-------------------------------------------------------------------------------------
+ What does “Cascading” in CSS mean?
+“Cascading” refers to the cascading order in HTML document. This will sort the declared CSS in an order to avoid the conflicts.
+------------------------------------------------
+5) List out the components of CSS style?
+
+Below are the different components of CSS styles –
+
+Property 
+Selector
+Value
+------------------------------------------------------
+ Explain universal selector in CSS?
+
+Universal selectors is used to match any element types. Below is the example for the same. For example,
+
+* { 
+ color: #FFFFFF; 
+}
+This rule is used to render the content of all elements in our document in white.
+------------------------------------------------------------------
+Which property will be used for changing the face of font in CSS?
+
+“font family” property can be used for changing the face of font.
+-----------------------------------------------------------------------
+http://a4academics.com/interview-questions/79-web/817-css-css3?showall=&start=1
