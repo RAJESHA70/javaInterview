@@ -1,0 +1,195 @@
+What is Angular and Why Angular?
+Angular (2/4/5) is not a programming language like Javascript or Typescript. Angular is a front-end or client-side Framework, 
+which needs a programming language like Typescript to build  the SPA (Single Page Application) .
+
+---------------------------
+Angular 6 and its new features?
+1.ng add @angular/element
+2.ng update is a new Angular-cli command too. It’s used to update and upgrade your packages. It’s really helpful, for example, 
+when you want to upgrade from Angular 5 to Angular 6, or any other package in your Angular app.
+3.Declaring the providers inside the service itself
+Before this update, you had to the declare the providers array in app.module.ts
+
+Now with Angular 6, 
+you can provide your service inside the supervisor itself by putting the providedIn:root property within
+the "@injectable" decorator.
+https://cdn-images-1.medium.com/max/1600/1*3Huej4et-8LIfrAEhzY3pQ.png
+
+
+Use ng-template instead of template directive
+You can use ng-template to render the HTML instead of the template tag in the new version of Angular. 
+ng-template is an Angular element, and it works when it is used with a structural directive such as *ngFor and *ngIf
+
+
+Upgrading to RxJS 6.0.0
+Angular 6 uses the latest version of Rxjs library.
+
+--------------------------
+Angular 5 new features...?
+Certain tools are optimized in the new version of Angular, let us see what the tools are:
+
+Angular 5 supports Typescript version 2.4
+
+Angular 5 supports RxJS 5.5 which has new features like Pipeable Operators
+
+A build tool to make the js bundles (files) lighter
+
+Ahead of Time (AOT) is updated to be on by default
+
+Events like ActivationStart and ActivationEnd are introduced in Router
+---------------
+
+4.2. Name the building blocks of Angular.
+The Angular application is made using the following: 
+
+Modules
+
+Component
+
+Template
+
+Directives
+
+Data Binding
+
+Services
+
+Dependency Injection
+
+Routing
+----------------------
+5. What is Transpiling in Angular?
+
+6.  Angular life cycle ?
+OnChange()  -  OnInit()  -  DoCheck()  -  AfterContentInit()  -  AfterContentChecked() 
+-  AfterViewInit()  -  AfterViewChecked()  -  OnDestroy(). 
+
+7.Differentiate between Components and Directives in Angular 5.
+Components break up the application into smaller parts; whereas, Directives add behavior to an existing DOM element. 
+8.What is the use of @Input and @Output?
+
+9.What is ng-content Directive?
+ content between the angular tags like  <app-tax>some tax-related content</app-tax>
+ This will not work the way it worked for HTML elements.  Now, in such cases, the <ng-content> tag directive is used. 
+
+10. what does this.router.navigate([‘/component_name’]) do ?
+
+11.  What is ViewEncapsulation?
+ViewEncapsulation decides whether the styles defined in a component can affect the entire application or not. 
+There are three ways to do this in Angular: 
+
+Emulated: styles from other HTML spread to the component.
+
+Native: styles from other HTML do not spread to the component.
+
+None: styles defined in a component are visible to all components.
+
+12.Services? 
+help us in not repeating the code. With the creation of services, we can use the same code from different components. 
+Here is the command to create a service in angular, ng g service User.
+
+13. What is Dependency Injection in Angular 4?
+When a component is dependent on another component the dependency is injected/provided during runtime.
+For that we need to make the another component/service @injectable.And then inject it in constructor of the component where there is need.
+
+14. What is Routing in Angular 5?
+Routing helps a user in navigating to different pages using links. 
+
+15.How to handle Events in Angular 5?
+Any activity (button click, mouse click, mouse hover, mouse move, etc) of a user on a frontend/web screen is termed as an event. Such events are passed 
+from the view (.HTML) page to a typescript component (.ts).
+
+16.What is RouterOutlet?
+goto : https://blog.ng-book.com/basic-routing-in-angular-2/
+Routes is an object that we use on our application component that describes the routes we want to use. 
+For instance, we could write our routes like this:
+
+const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent }
+];
+
+const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent }
+];
+ 
+Notice here that we:
+
+use path to specify the URL
+we specify the component we want to route to
+we can redirect using the redirectTo option
+
+https://blog.ng-book.com/basic-routing-in-angular-2/
+---------------
+17. n how many ways the Data Binding can be done?
+Data Binding happens between the HTML (template) and typescript (component). Data binding can be done in 3 ways:
+
+(i) Property Binding :
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'my-app',
+    template: `
+                <h1 [innerHtml]='fullName'></h1>
+              `
+})
+export class AppComponent {
+    fullName: string = 'Martin Luther King Jr';
+}
+(ii) Event Binding (iii) Two-Way Data Binding. 
+----------------
+18. What is the purpose of using package.json in the angular project?
+With the existence of package.json, it will be easy to manage the dependencies of the project. 
+If we are using typescript in the angular project then we can mention the typescript package and 
+version of typescript in package.json.
+
+20.What is Component,  ngModel [{}] and how do we represent it? 
+21. What does a Subscribe method do in Angular 4? 
+It is a method which is subscribed to an observable. 
+Whenever the subscribe method is called, an independent execution of the observable happens.  
+
+22. Differentiate between Observables and Promises.
+Observables are lazy, which means nothing happens until a subscription is made.
+Whereas Promises are eager; which means as soon as a promise is created,
+the execution takes place. 
+Observable is a stream in which passing of zero or more events is possible 
+and the callback is called for each event. Whereas, promise handles a single event. 
+
+23.24. What is an AsyncPipe in Angular? 
+When an observable or promise returns something, we use a temporary property to hold the content. Later, 
+we bind the same content to the template.
+With the usage of AsyncPipe, the promise or observable can be directly used in a template and a temporary property is not required. 
+
+24.Explain Authentication and Authorization.
+Authentication: The user login credentials are passed to an authenticate API (on the server).
+On the server side validation of the credentials happens and a JSON Web Token (JWT) is returned. 
+JWT is a JSON object that has some information or attributes about the current user. 
+Once the JWT is given to the client, the client or the user will be identified with that JWT.
+
+Authorization: After logging in successfully, the authenticated or genuine user does not have access to everything.
+The user is not authorized to access someone else’s data,  he/she is authorized to access some data.  
+
+26. What is AOT Compilation?
+Every angular application gets compiled internally. The angular compiler takes javascript code,
+compiles it and produces javascript code again. 
+Ahead-of-Time Compilation does not happen every time or for every user, as is the case with Just-In-Time (JIT) Compilation. 
+
+27. What is Redux? 
+It is a library which helps us maintain the state of the application. 
+Redux is not required in applications that are simple with the simple data flow,
+it is used in Single Page Applications that have complex data flow. 
+
+
+28.What are the Pipes? 
+This feature is used to change the output on the template; 
+something like changing the string into uppercase and displaying it on the template. 
+It can also change Date format accordingly. 
+
+
+29. Why Typescript with Angular? 
+Typescript is a superset of Javascript
