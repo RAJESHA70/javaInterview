@@ -3,7 +3,7 @@ Angular (2/4/5) is not a programming language like Javascript or Typescript. Ang
 which needs a programming language like Typescript to build  the SPA (Single Page Application) .
 
 ---------------------------
-Angular 6 and its new features?
+Angular 6 and its new features?https://www.geeksforgeeks.org/difference-between-typescript-and-javascript/
 1.ng add @angular/element
 2.ng update is a new Angular-cli command too. It’s used to update and upgrade your packages. It’s really helpful, for example, 
 when you want to upgrade from Angular 5 to Angular 6, or any other package in your Angular app.
@@ -193,3 +193,27 @@ It can also change Date format accordingly.
 
 29. Why Typescript with Angular? 
 Typescript is a superset of Javascript
+---------------------------
+What is Lazy loading?
+Lazy loading helps us to download the web pages in chunks instead of downloading everything in a big bundle.
+
+To implement the Lazy Loading in Angular we need to create a routing module and
+a module.ts file for the component we need to lazy load.and there put the components 
+you want to load lazily.
+
+example...
+https://codeburst.io/how-to-implement-lazy-loading-in-angular-bb2a670b34d
+
+we have created two files which are posts-routing.module.ts(here we will write code for routing and 
+we are passing the routes array as an argument to the RouterModule.forChild method.) and
+posts.module.ts(this is a new module which will have the components that is to be lazy loaded and exports this module as well).
+
+3. in app.module.ts
+{
+    path: "posts",
+    loadChildren: "../app/posts/posts.module#PostsModule"
+  },
+
+and remove all the component from app.module.ts ke declaration se...
+that's it.
+
