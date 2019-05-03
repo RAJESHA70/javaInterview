@@ -151,3 +151,35 @@ Which property will be used for changing the face of font in CSS?
 “font family” property can be used for changing the face of font.
 -----------------------------------------------------------------------
 http://a4academics.com/interview-questions/79-web/817-css-css3?showall=&start=1
+-----------------------------------------------------------------------
+div, p - Selects all <div> elements and all <p> elements
+div p - Selects all <p> elements that are anywhere inside a <div> element
+div > p - Selects all <p> elements where the immediate parent is a <div> element
+div + p - Selects all <p> elements that are placed immediately after a <div> element
+div ~ p - Selects all <p> elements that are anywhere preceded by a <div> element
+---------------------------------------------------------------------------
+cm - centimeters
+em - elements (i.e., relative to the font-size of the element; e.g., 2 em means 2 times the current font size)
+in - inches
+mm - millimeters
+pc - picas (1 pc = 12 pt = 1/6th of an inch)
+pt - points (1 pt = 1/72nd of an inch)
+px - pixels (1 px = 1/96th of an inch)
+-------------------------------------------------------
+
+In CSS3, how would you select:
+
+Every <a> element whose href attribute value begins with “https”.
+Every <a> element whose href attribute value ends with “.pdf”.
+Every <a> element whose href attribute value contains the substring “css”.
+--------------------------
+The flex property is a shorthand property for:
+
+flex-grow
+flex-shrink
+flex-basis
+The flex property sets the flexible length on flexible items.
+
+flex: flex-grow flex-shrink flex-basis|auto|initial|inherit;
+
+------------
