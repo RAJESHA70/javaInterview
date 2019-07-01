@@ -1,0 +1,23 @@
+For java version 7 or below, similar functionally you can achieve using nested class declared within interface body. and this nested class implements outer interface.
+
+Example:
+interface I1{
+    public void doSmth();
+
+    class DefaultRealizationClass implements  I1{
+
+        @Override
+        public void doSmth() {
+           System.out.println("default realization");
+        }
+    }
+}
+How do we use it in our code?
+class MyClass implements I1{
+
+    @Override
+    public void doSmth() {
+         new I1.DefaultRealizationClass().doSmth();
+    }   
+}
+Therefore default implementation encapsulated within interface.
