@@ -21,3 +21,69 @@ class MyClass implements I1{
     }   
 }
 Therefore default implementation encapsulated within interface.
+--------------------------------------------------------
+Java SE 7 has been a major milestone in the evolution history of Java, with multiple features included to shape the language further. Before we start with Java 8 features, let's glance through some features provided by Java 7:
+1. String literals in switch statements
+
+--before java 7
+// gadget is a string variable
+if(gadget.equals("Mobile"))
+	System.out.println("Rs.5000 to 50000");
+--java 7 
+switch(gadget) {
+	case "Mobile": System.out.println("Rs.5000 to 50000");
+    }
+
+2. Diamond operator in Collection
+--before java 7 (Prior to Java SE 7, type information had to be supplied on both the sides of the statement which declares a collection)
+List<String> lstNames = new ArrayList<String>();
+-- java 7 
+List<String> lstNames = new ArrayList<>();
+
+3.Handling multiple exceptions with a single catch block
+A try block may be associated with any number of catch blocks to handle various exceptions that may be raised. 
+Many a times, the exception handling logic is same for multiple catch blocks.
+From Java SE 7, a single catch block is sufficient to handle such multiple exceptions. This reduces the duplication of code.
+--before java 7 
+try {
+    // Code that may throw an exception
+}
+catch(NullPointerException ne) {
+    System.out.println(ne.getMessage());
+}
+catch(StringIndexOutOfBoundsException e) {
+    System.out.println(se.getMessage());
+}
+--java 7
+try {
+    // Code that may throw an exception
+}
+catch(NullPointerException | StringIndexOutOfBoundsException e) {
+    System.out.println(e.getMessage());
+}
+
+4.Try with resources block
+--Before Java SE 7, we used to close the non-Java resources such as streams and JDBC connections inside the finally block.
+Connection connection = null;
+try {
+    connection = DriverManager.getConnection("url");
+    // DB operations using connection
+}
+catch(SQLException e) {
+    System.out.println(e);
+}
+finally {
+    if(connection != null)
+        connection.close();
+}
+--Java 7 has presented a feature named try-with-resources block, where resources are opened at the start of the try block 
+and closed automatically when the try block ends. This feature can be termed as Automatic Resource Management (ARM).
+try(Connection connection = DriverManager.getConnection("url")) {
+    // DB operations using connection
+}
+catch(SQLException e) {
+    System.out.println(e);
+}
+finally {     
+  //close is not required
+}
