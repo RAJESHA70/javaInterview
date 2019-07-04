@@ -5,3 +5,402 @@ Develop Functional Interfaces
 Apply Lambda Expressions
 Work with Streams API
 Make use of Optional class
+
+The release of Java 8 aims at improvising the code clarity and efficiency of the applications that are developed using 
+Java/Java-based technologies. It has brought changes and improvements to the following:
+
+Java Language
+1.Default and Static Methods in Interfaces:-
+some observations:
+Default methods bridge down the differences between interfaces and abstract classes.
+They help in removing the base implementation classes. The default implementation can be provided in the interface itself and the implementation classes can choose which one to override.
+If there is a method in any class of the same inheritance hierarchy that matches the signature of the default method , then the interface's default method becomes irrelevant.
+A default method cannot override methods from java.lang.Object
+Default methods also help in avoiding utility classes, for example all the Collections class methods can be provided in the Collection interface as default methods.
+One of the major reasons for introducing default methods was to enhance the Collections API to have a support for lambda expressions.
+Following are the methods added as default in Java 8:
+ 
+Class/Interface         New Methods
+Map                   getOrDefault, forEach, compute, computeIfAbsent, computeIfPresent, merge, putIfAbsent, remove, replace, replaceAll
+Iterable              forEach, spliterator
+Iterator              forEachRemaining
+Collection            removeIf, stream, parallelStream
+List                  replaceAll, sort
+BitSet                stream
+-------
+When we have common behaviors for all the implementations of an interface, making them static inside the interface will make them part of the interface itself. No external utility class would be required in such a case.
+Just like the static methods of a class, the static methods of an interface belong to the interface, and not to any instance of its implementing classes.
+These methods can only be invoked using the interface name.
+public interface Remunerator {
+    public abstract double deductFoodFee();                   // Must be overridden by all implementing classes
+    final double HEALTH_INSURANCE_PERCENTAGE = 5.0;
+    final double PENSION_PERCENTAGE = 5.0;
+    
+    public default double deductHealthInsurancePremium() {    // Need not be overridden
+        // Default implementation which can be redefined
+    }
+ 
+    public static double deductForPension(double employeeSalary) {    // Static method of the interface
+		return (employeeSalary * PENSION_PERCENTAGE / 100);
+    }
+}
+use it like this,,,
+public class PartTimeEmployee extends Employee {
+    //field declarations
+    public double calculateSalary() {
+        // calculating salary - part time employee
+ 
+        this.employeeSalary -= Remunerator.deductForPension(this.employeeSalary);
+        
+        // Further operations
+    }
+ 
+    public double deductFoodFee() {
+        // Food fee deduction from salary
+    }
+}
+---------------
+
+Here are some observations about static methods in interfaces:
+Static methods in interfaces are good for providing utility methods, for example null check, collection sorting, etc.
+Methods of java.lang.Object can never be the defined as static methods in interfaces
+The Comparator interface of Java 8 is a perfect example in which static methods have been included: comparingInt(), comparingDouble(), comparingLong(), naturalOrder(), nullsFirst(), nullsLast() and reverseOrder()
+ 
+Let us see an example of the static method, naturalOrder() of Comparator interface:
+public class SortStaticDemo {
+    public static void main(String[] args) {
+        List<String> countrylst = Arrays.asList("India", "America", "Japan", "Brazil");
+        countrylst.sort(Comparator.naturalOrder()); // will sort in String natural sorting order
+        for (String countryName : countrylst) {
+            System.out.println(countryName);
+        }
+    }
+}
+----problem 1 
+interface Deduction {
+	static void deduct() {
+		System.out.println("deduct");
+	}
+}
+class Customer implements Deduction {
+	public static void deduct() {
+		System.out.println("deduction for customer");
+	}
+}
+public class Java8Static {
+	public static void main(String[] args) {
+		Deduction deduction = new Customer();
+		deduction.deduct();//The code will not get compiled as the static method of interface is not accessed using interface name
+
+	}
+  ----problem 2
+  To begin with this, an annotation has been created to keep a record of developer names and the methods they have worked on:
+@Target({ElementType.TYPE})    // Can be applied at class, interface or enum level
+public @interface Author {
+	String name();
+	String method();
+}
+
+The code that uses @Author annotation:
+@Author(name="John, James, Mark", method="calculateSalary(), deductFoodFee(), deductHealthInsurancePremium()")
+public class FullTimeEmployee extends Employee {
+    //field declarations
+	public double calculateSalary() {
+		// Salary calculation for full-time employee 
+	}
+	public double deductFoodFee() {
+		// Food fee deduction from salary
+	}
+	public double deductHealthInsurancePremium() {
+		return (HEALTH_INSURANCE_PERCENTAGE * employeeSalary) / 100;
+	}
+}
+-------The problem here is easily noticeable - there is no clear indication who has worked on which method.--
+A solution for our problem could be to maintain an array of @Author to hold the information more clearly:
+public @interface Authors {    
+	Author[] value();
+}
+
+This will transform our class as below:
+@Authors({ @Author(name="John", method="calculateSalary()"),
+           @Author(name="James", method="deductFoodFee()"),
+           @Author(name="Mark", method="deductHealthInsurancePremium()") })
+ 
+public class FullTimeEmployee extends Employee {
+    //field declarations
+	public double calculateSalary() {
+		// Salary --- full-time employee 
+	}
+	public double deductFoodFee() {
+		// Food fee deduction from salary
+	}
+	public double deductHealthInsurancePremium() {
+		return (HEALTH_INSURANCE_PERCENTAGE * employeeSalary) / 100;
+	}
+}
+--------------------------------  
+2.Repeating Annotations
+As we can see, annotations cannot be directly repeated on the same element (eg. class, field, method), and need to be grouped as an array, giving a clumsy look to the code.
+Beginning with Java 8, we can directly repeat an annotation on the same element and this is just because of @Repeated annotation 
+ 
+To repeat @Author annotation, we are supposed to make some changes to our existing code.
+@Repeatable(value = Authors.class)
+public @interface Author {
+    String name();
+    String method();
+}
+
+public @interface Authors {
+    Author[] value();
+}
+Now our classes can be annotated like this:
+@Author(name="John", method="calculateSalary()")
+@Author(name="James", method="deductFoodFee()")
+@Author(name="Mark", method="deductHealthInsurancePremium()")
+ 
+public class FullTimeEmployee extends Employee {
+    //field declarations
+	public double calculateSalary() {
+		// Salary calculation for full-time employee 
+	}
+	public double deductFoodFee() {
+		// Food fee deduction from salary
+	}
+	public double deductHealthInsurancePremium() {
+		return (HEALTH_INSURANCE_PERCENTAGE * employeeSalary) / 100;
+	}
+}
+Repeating Annotations
+-----------------------
+3.Functional Interfaces
+4.Lambda Expressions:-
+---------------
+Our requirement can also be fulfilled using the lambda expressions syntax of Java 8:
+public void sortEmployeesByCountry(List<Employee> empList) {	
+    empList.sort((Employee employee1, Employee employee2) -> employee1.getCountry().compareTo(employee2.getCountry()));
+}
+
+This code shall be written as:
+Comparator<Employee> comparator = (Employee employee1, Employee employee2) -> employee1.getCountry().compareTo(employee2.getCountry());
+empList.sort(comparator);
+
+We can see that this has a concise syntax and eliminates the need for implementing classes.
+ 
+Lambda expressions provide implementation logic for functional interfaces (interfaces with only one method) which we'll discuss soon.
+Lambda expressions add the essence of functional programming in Java. They are functional constructs without classes which can be passed like objects and executed as required. They also make the modifiers, return type, and parameter types completely optional.
+As you might have already noticed, the syntax of lambda expressions is comprised of three parts:
+(arguments) -> (body)
+An argument list: Parameter list should be exactly the same (in terms of number, type and order of arguments) as such in the abstract method of the interface. For example:
+() -> { System.out.println("No argument"); }
+(int argument1, String argument2) -> { System.out.println("Multiple arguments"); }
+
+Argument types can be eliminated, making them inferred types. i.e. (int argument) and (argument) are same.
+Also, parenthesis () can be eliminated if there is only one argument.
+argument -> { return argument*argument; }
+
+ 
+The arrow (->) token
+ 
+The body: It can be be a single statement or a block.
+Presence of curly braces is not mandatory when the body contains not more than one statement. Also, the return type of any lambda expression/anonymous function will be the type of the expression that the body evaluates to.
+(e1, e2) -> e1.getCountry().compareTo(e2.getCountry())
+
+If the body contains a block of statements, curly braces should enclose them and return statement becomes mandatory when the block returns something.
+(e1, e2) -> {
+    int value = e1.getCountry().compareTo(e2.getCountry());
+    return value;
+}
+
+ 
+Note: Inferred and declared types cannot be used together, i.e. (int x, y) -> x+y; is invalid.
+
+As you have noticed, lambda expressions provide interface implementations.
+So the target type of any lambda expression is of Functional Interfaces.
+Functional interfaces strictly have abstract methods of count one. But, they are allowed to have any number of static or default methods. Also, they can override some methods from java.lang.Object.
+Hence, lambda expressions can appear only in places where functional interfaces are used.
+
+@FunctionalInterface annotation helps designing an interface as functional interface. By doing so, compiler will raise an error if the count of abstract methods in the interface exceeds one.
+@FunctionalInterface 
+interface StringFormatter {  
+    void format(String string1,String string2);    // The only abstract method
+}
+class test{
+  psvm(){
+  StringFormatter concatString= (string1,string2)-> { return string1.toUpperCase()+"-"+string2.toUpperCase(); } ;
+  System.out.println(concatString.format(s1, s2));
+ }
+}
+ 
+ 
+While working with lambda expressions, the compiler is responsible for inferring its type. For example:
+Collections.sort(empList , (employee1, employee2) -> employee1.getCountry().compareTo(employee2.getCountry()));
+
+The compiler will be able to refer the above lambda expression  based on the following:
+Based on the current context, compiler infers second parameter should be of type java.util.Comparator Interface based on the definition of Collections.sort() method.
+java.util.Comparator has exactly one abstract method compare() and could be used as the second parameter of sort().
+The argument list of lambda expression (employeee1 , employeee2) matches the compare(Object objt1, Object objt2) method present in  the Comparator interface.
+The return type of lambda's body is int, that exactly matches the compare() method's return type.
+The body of the lambda here, throws no checked exception, and hence matches compare() method's complete signature.
+
+Following are some of the functional interfaces available in Java:
+ 
+Functional Interface                        Abstract Method
+java.awt.event.ActionListener               void actionPerformed(ActionEvent event)
+java.beans.PropertyChangeListener           void propertyChange(PropertyChangeEvent evt)
+java.io.FileFilter                          boolean accept(File filePathname)
+java.lang.Runnable                          void run()
+java.security.PrivilegedAction              T run()
+java.util.concurrent.Callable               V call()
+java.util.Comparator                        int compare(T objectt1, T objectt2)
+--------------------------
+Method references can be applied in the following ways :
+ 
+ 
+Method Type                                  Lambda Expression                      Method Reference
+Static method                                (String s) -> Integer.parseInt(s)    Integer::parseInt       
+Instance method of particular type           (String s) -> s.length()             String::length
+Instance method of particular type           () -> emp.getEmpId()                 emp::getEmpId
+                                          where emp is an instance of Employee
+
+Constructor                                   (String s)->new String(s)           String::new
+
+
+
+There are many other useful functional interfaces defined in the java.util.function package.
+ 
+Type	    Functional Interface	        Abstract Method	Description
+Function	Function<T, R>	R apply(T t)	Function that accepts single argument and produces result  
+Predicate	Predicate<T>	boolean test(T t)	Boolean-valued function that takes single argument
+Consumer	Consumer<T>	void accept(T t)	Function that accepts single argument but returns no result
+Supplier	Supplier<T>	T get()	Function that denotes a supplier of results
+ 
+
+We have already covered Predicate interface. Now let's cover others as well.
+
+-------------- 
+Java Compiler
+5.Named Parameters
+
+Java Libraries
+6.Optional class
+7.Date/Time API
+8.Stream API
+A Stream denotes the flow of a group of elements in sequence from a specific source, and supports different data processing operations.
+In other words, it provides an abstraction over an existing collection.
+The group of elements in sequence belongs to a specific type, and can have sources like collections, I/O resources or arrays.
+The data processing operations like filter, map, sort, count, etc. can be easily used to manipulate the data in a stream.
+ 
+The Stream interface is available in the java.util.stream package, and can be of any specified type - Stream<Integer>, Stream<Employee>, etc.
+Now, it's time to understand how to create streams from various sources.
+Post Rs. 5000 increment, TechSol HR needs the information of the highest paid employees who have spent less than a year in the organization.
+This can be solved as below:
+public class FilterEmployee {
+    public static void main(String[] args) {
+        List <Employee> lstEmp = Employee.getEmpList();
+	
+        List<Employee> lstNewEmp = lstEmp.stream().filter(emp -> emp.getYearsInOrg() < 1)
+            .map(e -> { e.setSal(e.getSal() + 5000); return e; })    // Incrementing salary
+            .collect(Collectors.toList());
+ 
+        System.out.println("Employees less than a year old with increment:");
+        lstNewEmp.forEach(e -> System.out.println(e.getId() + ":" + e.getName() + ":" + e.getSal())); 
+ 
+        Optional<Integer> max = lstNewEmp.stream().map(e->e.getSal())
+            .reduce(Integer::max);    // Finding the maximum salalry
+        List<Employee> lstMaxEmp =  lstNewEmp.stream()
+            .filter(e -> e.getSal() == max.get())    // Finding employees with the maximum salary
+            .collect(Collectors.toList());
+ 
+        System.out.println("\nEmployees having maximum salary after increment:");
+        lstMaxEmp.forEach(e -> System.out.println(e.getId() + ":" + e.getName() + ":" + e.getSal())); 
+    }
+}
+
+ 
+
+As you can see, we have used the reduce() terminal function in stream for finding the maximum salary.
+Optional<T> reduce(BinaryOperator<T> accumulator);
+
+It takes a BinaryOperator type where we have passed Integer::max as the implementation for comparison. The return type is Optional which is used to avoid nulls.
+     
+     
+     System.out.println("//given a list of numbers and retrun cube of it using map method of stream...");
+        List<Integer> list=Arrays.asList(1,2,5);
+        Stream<Integer> cube_list= list.stream().map(i-> i*i*i);
+        
+        cube_list.forEach(i->System.out.println(i));
+        /*cube_list.forEach(i->System.out.println(i));//This line will give error becoz  cube_list is  Stream<Integer> but if we make it List<Integer> exception will vanished...
+       
+*/
+
+We have seen how streams can be used to perform operations such as filtering, sorting, etc. in a declarative way, making the syntax concise and easy to use.
+However, with such operations at extensive levels comes the issue of performance and resource utilization. For example, operating on millions of records sequentially can degrade performance. Multithreading can provide a noticeable advantage here, but it has always been a challenging task for developers.
+With the introduction of advanced concurrent programming features in Java, streams in the form of parallel streams not only utilize multithreading, but also provide a significant abstraction over thread pool management and the fork-join framework. This helps in utilizing the power of multicore CPUs for parallel processing in a simple declarative way.
+Here's a familiar example using the parallelStream() method to retrieve a parallel stream from a collection:
+public class FilterEmployee {
+    public static void main(String[] args) {
+        List<Employee> lstEmp = Employee.getEmpList();
+        lstEmp.parallelStream().filter(emp -> emp.getYearsInOrg() < 1)
+            .sorted((e1, e2) -> e1.getId() - e2.getId())
+            .forEach((e) -> System.out.println(e.getId() + ":" + e.getName()));
+    }
+}
+
+
+Parallel stream divides its elements into several chunks and processes each chunk on a different thread. By default, parallelStream() creates threads whose count equals the number of processors available.
+Though parallel stream may look like an answer for faster performance, it may not always be the case. So benchmarking the performance and verifying the performance gain is an advisable step. Also checking the operations which are being used in the stream can help in deciding when to use parallel streams. Operations which are dependent on the ordering of the elements like limit(), findFirst(), etc. are quite expensive in parallel stream.
+When we look at the reasons for application failures, NullPointerException finds its place at the top.
+Using the if construct has become the most common way of performing null checks. We know this is the construct most widely used for writing business validations. However, null checks do not directly contribute to business functionality.
+In approaches like ours, there is no clear demarcation between null checks and business logic. And it would be convenient if null checks could be decoupled from the business logic.
+ 
+For this, Java 8 gives us the Optional class.
+The Optional class, present in the java.util package, represents a container which may hold null or non-null values.
+It provides a number of methods to perform null check without polluting the code.
+ 
+Let's see how our FullTimeEmployee class will look with an Optional passport:
+class FullTimeEmployee extends Employee {
+    
+    // Declaring an Optional container which can hold Passport object
+    private Optional<Passport> passport = Optional.empty();    // The container is initially empty
+	
+    public Optional<Passport> getPassport() {
+        return passport;
+    }
+    public void setPassport(Optional<Passport> passport) {
+        this.passport = passport;
+    }
+    // Other fields and methods
+}
+Once we have an Optional object, we can use the provided methods to avoid null checks in various ways:
+ 
+Name	Description
+Optional <T> empty()	Returns an empty Optional
+T get()	Returns the value, if any. Throws NoSuchElementException,otherwise
+boolean isPresent()	Returns true when there is a value. Returns false, otherwise
+T orElse(T other)	Returns the value, if any. Returns the argument being passed, othewise
+Optional<T> of(T value)	Returns Optional that holds the non-null value that is passed as argument
+Optional<T> ofNullable(T value)	Returns Optional that holds the value being passed as argument if non-null. Returns empty Optional, otheriwse
+Optional<U> flatMap (Function<? super T, Optional<U>> mapper)	Applies the specified Optional - bearing mapping function to the value (if present) and returns the result. Returns empty Optional, otherwise
+Optional<U> map (Function<? super T, ? extends U> mapper)	Applies the specified Optional - bearing mapping function to the value (if present). And, if the result does not equal null, returns an Optional that describes the result
+
+Using the methods provided, we can modify our implementation to utilize the features of Optional:
+public class EmployeeStarter {
+    public static void main(String[] args) {
+        // Code to retrieve full-time employees and to store them in a list called employeesList
+		
+        List<Integer> passportNumbers = new ArrayList<>();    // List to collect the passport numbers
+        for(FullTimeEmployee employee : employeesList) {
+            Optional<Employee> optEmp = Optional.of(employee);
+            passportNumbers.add(optEmp.flatMap(Employee::getPassport).map(Passport::getPassportNumber).orElse(0));
+        }
+    }
+}
+
+Here inside the loop, if employees exist and have passports, their passport numbers will be fetched. Otherwise, the default passport number (0) will be returned.
+flapMap() is used when the method reference passed to it, returns an Optional while map() is used when the method reference passed to it, returns a non optional value. Since Employee.getPassport() is returning an Optional we use flatMap() while Passport.getPassportNumber() returns a int so we use map method directly, which in turn wraps the return value in an Optional.
+Just like we instantiated the Optional using Optional.empty(), there are other ways to instantiate an Optional:
+private Optional<Passport> passport = Optional.of(new Passport(111));
+
+private Optional<Passport> passport = Optional.ofNullable(new Passport(111));
+
+
